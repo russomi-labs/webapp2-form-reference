@@ -1,0 +1,46 @@
+application: mini-gae-bootstrap-template
+version: latest
+runtime: python27
+api_version: 1
+threadsafe: yes
+
+handlers:
+- url: /favicon\.ico
+  mime_type: image/vnd.microsoft.icon
+  static_files: static/ico/favicon.ico
+  upload: static/ico/favicon.ico
+
+- url: /apple-touch-icon\.png
+  static_files: static/ico/apple-touch-icon.png
+  upload: static/ico/apple-touch-icon.png
+
+- url: /apple-touch-icon-precomposed\.png
+  static_files: static/ico/apple-touch-icon-precomposed.png
+  upload: static/ico/apple-touch-icon-precomposed.png
+
+- url: /(robots\.txt|humans\.txt|crossdomain\.xml)
+  static_files: static/\1
+  upload: static/(robots\.txt|humans\.txt|crossdomain\.xml)
+
+- url: /img/(.*\.(gif|png|jpg))
+  static_files: static/img/\1
+  upload: static/img/(.*\.(gif|png|jpg))
+
+- url: /css
+  mime_type: text/css
+  static_dir: static/css
+
+- url: /js
+  mime_type: text/javascript
+  static_dir: static/js
+
+- url: .*
+  script: main.app
+
+libraries:
+- name: jinja2
+  version: "2.6"
+- name: webapp2
+  version: "2.5.1"
+- name: markupsafe
+  version: "0.15"

@@ -1,0 +1,119 @@
+{# Jinja2 WTForms macros for twitter bootstrap #}
+{# https://gist.github.com/3752314 #}
+
+{%- macro form_field_label(field) -%}
+    <label for="{{ field.id }}">{{ field.label.text }}&nbsp;
+    {%- if field.flags.required -%}
+        <abbr title="Required">*</abbr>
+    {%- endif %}</label>
+{% endmacro %}
+
+{%- macro form_field_description(field) -%}
+    {% if field.description %}
+        <span class="help-block">{{ field.description }}</span>
+    {% endif %}
+{%- endmacro -%}
+
+{%- macro form_field_errors(field) -%}
+    {% if field.errors %}
+    <div>
+        {%- for error in field.errors -%}
+        <span class="label label-important">{{ error }}</span>
+        {%- endfor -%}
+    </div>
+    {% endif %}
+{%- endmacro -%}
+
+{%- macro form_field_boolean(field) -%}
+    <label class="checkbox">
+        {{ field(**kwargs) }}
+        <span>{{ field.label.text }}</span>
+        {{ form_field_description(field) }}
+        {{ form_field_errors(field) }}
+    </label>
+{%- endmacro -%}
+
+{%- macro action_buttons(submit_title, cancel_title="Cancel", submit_class="primary") -%}
+<div class="form-actions">
+    <input type="submit" class="btn {{submit_class}}" value="{{submit_title}}">
+    &nbsp;
+    <button type="reset" class="btn">{{cancel_title}}</button>
+</div>
+{%- endmacro -%}
+
+{%- macro form_field(field) -%}
+    {% if field.type == 'HiddenField' %}
+        {{ field() }}
+    {% else %}
+        {% if field.type == 'BooleanField' %}
+            {{ form_field_boolean(field, **kwargs) }}
+        {% else%}
+            {{ form_field_label(field) }}
+                    <div class="input" id="{{field.id}}-div">
+            {% if field.type == 'RadioField' %}
+                {{ field(class='radio-group', **kwargs) }}
+            {% else %}
+                {{ field(**kwargs) }}
+            {% endif %}
+            {{ form_field_description(field) }}
+            {{ form_field_errors(field) }}
+                    </div>
+        {% endif %}
+    {% endif %}
+{%- endmacro -%}
+
+{# See here: http://twitter.github.com/bootstrap/base-css.html#forms #}
+{% macro form_field_horizontal(field) -%}
+    {% set with_label = kwargs.pop('with_label', False) %}
+    {% set placeholder = '' %}
+    {% if not with_label %}
+        {% set placeholder = field.label.text %}
+    {% endif %}
+    <div class="control-group {% if field.errors %}error{% endif %}">
+        {% if with_label %}
+            <label for="{{ field.id }}" class="control-label">
+                {{ field.label.text }}{% if field.flags.required %} *{% endif %}:
+            </label>
+        {% endif %}
+        <div class="controls">
+            {% set class_ = kwargs.pop('class_', '') %}
+            {% if field.flags.required %}
+                {% set class_ = class_ + ' required' %}
+            {% endif %}
+            {% if field.type == 'BooleanField' %}
+                <label class="checkbox">
+                    {{ field(class_=class_, **kwargs) }}
+                    {{ field.label.text|safe }}
+                </label>
+            {% else %}
+                {% if field.type in ('TextField', 'TextAreaField', 'PasswordField') %}
+                    {% set class_ = class_ + ' input-xlarge' %}
+                {% elif field.type == 'FileField' %}
+                    {% set class_ = class_ + ' input-file' %}
+                {% endif %}
+                {{ field(class_=class_, placeholder=placeholder, **kwargs) }}
+            {% endif %}
+            {% if field.errors %}
+                <span class="error help-inline">{{ field.errors|join(', ') }}</span>
+            {% endif %}
+            {% if field.description %}
+                <p class="help-block">{{ field.description|safe }}</p>
+            {% endif %}
+        </div>
+    </div>
+{%- endmacro %}
+
+{%- macro form_fields(fields, class=None, legend=None) -%}
+    <fieldset {% if class %}class="{{class}}"{% endif %}>
+        {% if legend %}
+            <legend>{{legend}}</legend>
+        {% endif %}
+    {% for field in fields %}
+        {% if field.type == 'HiddenField' %}
+            {{ field() }}
+                {% else %}
+            {{ form_field(field) }}
+        {% endif %}
+    {% endfor %}
+  </fieldset>
+{%- endmacro -%}

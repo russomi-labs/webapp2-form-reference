@@ -1,0 +1,52 @@
+{# --- Extend the base.html layout #}
+{% extends 'base.html' %}
+
+{# --- import macros #}
+{% import 'forms.html' as forms %}
+
+{# --- customize page level blocks #}
+{% block title %}webapp2{% endblock title %}
+{% block project_name %}webapp2{% endblock project_name %}
+{% block description %}Reference application for webapp2, WTForms, Jinja2, and Bootstrap{% endblock description%}
+
+{# ---
+  Standard methods:
+
+  index - GET /resources/
+  new - GET /resources/new/
+  create - POST /resources/
+  show - GET /resources/{id}/
+  edit - GET /resources/{id}/{action}/
+  update - POST/PUT /resources/{id}/{action}/
+  delete - POST/DELETE /resources/{id}/{action}/
+
+#}
+
+{# --- Customize Site Navigation #}
+{% block nav %}
+
+              <li><a href="/resources/">Index</a></li>
+              <li><a href="/resources/new/">New</a></li>
+              <li><a href="/resources/100/">Show</a></li>
+              <li><a href="/resources/100/edit/">Edit</a></li>
+
+{% endblock nav %}
+
+{# --- Populate page content #}
+{% block content %}
+      <h1>Resources</h1>
+
+      {% if form %}
+      <form action="{{ uri_for(submit_routename, id=id) }}" method="POST">
+        {{ forms.form_fields(form, class=None, legend='This is a simple legend for the form.') }}
+        {{ forms.action_buttons('Save') }}
+      </form>
+      {% endif %}
+
+{% endblock content %}
+
+
+{# --- Page specific script tags #}
+{% block script %}
+    <script> /* add any script references for this page */ </script>
+{% endblock script %}
