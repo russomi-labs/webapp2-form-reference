@@ -240,22 +240,21 @@ class ResourceHandler(BaseHandler):
         self.render_response('resource.html', context)
 
 
-# Backup
-# class MainHandler(BaseHandler):
+class MainHandler(BaseHandler):
 
-#     def get(self):
-#         template_values = {
-#             'key': 'value'
-#         }
+    def get(self):
+        template_values = {
+            'key': 'value'
+        }
 
-#         self.render_response('starter-template.html', template_values)
+        self.render_response('starter-template.html', template_values)
 
 
-# class TemplateHandler(BaseHandler):
-#     def get(self, template_name):
+class TemplateHandler(BaseHandler):
+    def get(self, template_name):
 
-#         template_values = {
-#             'key': 'value'
-#         }
+        template_values = {
+            'key': 'value'
+        }
 
-#         self.render_response(template_name + '.html', template_values)
+        self.render_response(template_name + '.html', template_values)

@@ -14,6 +14,29 @@ from webapp2_extras.routes import RedirectRoute
 
 _routes = [
 
+    RedirectRoute('/<template_name>/',
+        handler='handlers.TemplateHandler',
+        name='template-handler',
+        defaults=None,
+        handler_method='get',
+        methods='GET',
+        schemes=None,
+        redirect_to=None,
+        redirect_to_name=None,
+        strict_slash=True),
+
+    RedirectRoute('/',
+        handler='handlers.MainHandler',
+        name='Main-handler',
+        defaults=None,
+        handler_method='get',
+        methods='GET',
+        schemes=None,
+        redirect_to=None,
+        redirect_to_name=None,
+        strict_slash=True),
+
+
     # index of resources / collection of resources
     RedirectRoute('/resources/',
         handler='handlers.ResourceHandler',
